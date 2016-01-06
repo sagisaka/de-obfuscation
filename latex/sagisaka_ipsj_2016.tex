@@ -37,14 +37,14 @@
 れる保護手法がある。難読化とは、プログラムの解析を困難にする手法である。
 一方、難読化されたプログラムを難読化前のプログラムに戻す逆難読化がある。
 逆難読化を行うには、どの難読化が適用されているか特定する必要がある。異
-なる方法での逆変換はプログラムを壊すためである．このような逆難読化は保
+なる方法での逆変換はプログラムを壊すためである。このような逆難読化は保
 護を無効にするため、対策が必要である。そこで本稿では保護手法の特定のし
-やすさを測定し、保護手法の見つけやすさを計測する．具体的には、難読化さ
+やすさを測定し、保護手法のみつけやすさを計測する。具体的には、難読化さ
 れたプログラムを解析し、難読化手法の特徴を探る。我々は、神崎らの不自然
-さ評価法\cite{kanzaki14ipsj}を利用した測定を行い，Allatoriという難読化
-ツールの特定の可能性を示した\cite{sagisaka15sigss}．本稿では、この研究
-をさらに推し進め、より多くの保護手法の特定を試みる．
-% 具体的には、5つの難読化手法を適用した9のソフトウェア(jarファイル)の
+さ評価法\cite{kanzaki14ipsj}を利用した測定を行い、Allatoriという難読化
+ツールの特定の可能性を示した\cite{sagisaka15sigss}。本稿では、この研究
+をさらに推し進め、より多くの保護手法の特定を試みる。
+% 具体的には、5つの難読化手法を適用した6のソフトウェア(jarファイル)の
 % 命令を解析し、オペコードの$n$-gramごとの生成確率を得る。またその結果
 % が、不明な難読化手法が実際に特定できるかを確かめる。
 
@@ -62,7 +62,7 @@ $p_1=f_1(p)$, $p_2=f_2(p)$を得る。
 \birth{q}がどのくらい違うかを評価する。
 
 その後、新たに不明な難読化手法$f_x$で難読化されたプログラム$f_x(p)$を
-用意し、提案手法と同様に解析を行う。その結果どの難読化手法が似ているか
+用意し、提案手法と同様に解析を行う。その結果、どの難読化手法が似ているか
 を検証する。
 
 \begin{figure}[b]
@@ -86,7 +86,7 @@ $p_1=f_1(p)$, $p_2=f_2(p)$を得る。
 もある。本来の命令は使用頻度の違いはあるものの、珍しいとは言い難い。そ
 こで、$n$-gramの頻度にも着目する。
 %
-このように，プログラムから命令の$n$-gramを抽出し，その珍しさ（パープレ
+このように、プログラムから命令の$n$-gramを抽出し、その珍しさ（パープレ
   キシティ）と頻度を保護手法の特徴とする。
 
 \section{評価実験}\label{sect:experiments}
@@ -124,91 +124,80 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
 %%%%追加
 その解析結果をもとに、不明な難読化手法の解析を行う。
 初めに、未知のプロダクトをケーススタディで扱った
-5つの難読化ツール（表\ref{table:tools}をランダムに選択し，難読化する。
-そして、どのツールが使われているかを検証する。
-次に、既知のプロダクト（表\ref{table:jars}）を未知の難読化手法で難読化し、
-どのような手法が使われているかを検証する。
+5つの難読化手法（表\ref{table:tools})をランダムに選択し、難読化する。
+その後、どの難読化手法が使われているかを検証する。
+次に、既知のプロダクト（表\ref{table:jars}）を未知の難読化手法で難読化する。
+その後、どの難読化手法が使われているかを検証する。
 未知のプロダクトとしてJUnit 3.7を使用した。
-このプロダクトはユニットテストフレムワークである。
+%このプロダクトはユニットテストフレームワークである。
 また、未知の難読化手法としてSandmarkのSimple Opaque Predicates (SOP) を使用した。
 %%%%
 
 \subsection{$n$-gramの分析}
 
-ここでは、$n$-gramの命令列を確認していく。
-オリジナルとMLIの頻度順それぞれでソートしたASMを表3に記す。
+%ここでは、$n$-gramの命令列を確認していく。
+%オリジナルとMLIの頻度順それぞれでソートしたASMを表3に記す。
 
-\begin{table*}[t]
-  \centering
-  \footnotesize{
-    \caption{ASM(5gram)の命令列}\label{table:asm}
-  \begin{tabular}{lrrrrrrr}
-    命令列 &
-    \multicolumn{1}{p{1cm}}{オリジナル} & 
-    \multicolumn{1}{p{1cm}}{Allatori} & 
-    \multicolumn{1}{p{1cm}}{Duplication} & 
-    \multicolumn{1}{p{1cm}}{Irreducibility} & 
-    \multicolumn{1}{p{1cm}}{Merge Local Integer} & 
-    \multicolumn{1}{p{1cm}}{ProGuard} & 
-    \multicolumn{1}{p{1cm}}{PPL} \\ \hline
-%    \multicolumn{1}{c}{\rotatebox{90}{オリジナル}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Allatori}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Duplication}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Irreducibity}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Merge Local Integer}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{ProGuard}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{パープレキシティ}} \\ \hline
-    \texttt{<code> <code> <code> <code> aload}      & 219 & 206 & 219 & 219 & 193 & 219 & 61.19 \\
-    \texttt{<code> <code> <code> aload getfield}    & 122 &  93 & 122 & 122 & 108 & 122 & 659.44 \\
-    \texttt{aload getfield ifnull aload getfield}   & 37  &  22 &  37 &  36 &  37 &  37 & 2478.75 \\
-    \texttt{istore iload aload arraylength ifcmpge} & 32  &   1 &  32 &  31 &  19 &  32 & 2305.93 \\
-    \texttt{aload ldc invokespecial gotoInsh aload} & 30  &     &  30 &  30 &  30 &  30 & 7249.22 \\
-  \end{tabular}
-  \begin{tabular}{lrrrrrrr}
-    命令列 &
-    \multicolumn{1}{p{1cm}}{オリジナル} & 
-    \multicolumn{1}{p{1cm}}{Allatori} & 
-    \multicolumn{1}{p{1cm}}{Duplication} & 
-    \multicolumn{1}{p{1cm}}{Irreducibility} & 
-    \multicolumn{1}{p{1cm}}{Merge Local Integer} & 
-    \multicolumn{1}{p{1cm}}{ProGuard} & 
-    \multicolumn{1}{p{1cm}}{パープレキシティ} \\ \hline
-%    \multicolumn{1}{c}{\rotatebox{90}{オリジナル}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Allatori}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Duplication}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Irreducibity}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{Merge Local Integer}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{ProGuard}} & 
-%    \multicolumn{1}{c}{\rotatebox{90}{パープレキシティ}} \\ \hline
-    \texttt{dup2X2 lxor lconst1 lneg bipush}   &     &     &     &     & 291 &     & 1.13E+06 \\
-    \texttt{lload dup2X2 lxor lconst1 lneg}    &     &     &     &     & 291 &     & 536547 \\
-    \texttt{aload lload bipush lshr l2i}       &     &     &     &     & 253 &     & 5141.94 \\
-    \texttt{<code> <code> <code> <code> aload} & 219 & 206 & 219 & 219 & 193 & 219 & 61.19 \\
-    \texttt{bipush lushr land lxor lstore}     &     &     &     &     & 187 &     & 52136.3 \\
-  \end{tabular}}
-\end{table*}
+
+%\begin{table*}[t]
+%  \centering
+%  \footnotesize{
+%    \caption{ASM(5gram)の命令列}\label{table:asm}
+%  \begin{tabular}{lrrrrrrr}
+%    命令列 &
+%    \multicolumn{1}{p{1cm}}{オリジナル} & 
+%    \multicolumn{1}{p{1cm}}{Allatori} & 
+%    \multicolumn{1}{p{1cm}}{Duplication} & 
+%    \multicolumn{1}{p{1cm}}{Irreducibility} & 
+%    \multicolumn{1}{p{1cm}}{Merge Local Integer} & 
+%    \multicolumn{1}{p{1cm}}{ProGuard} & 
+%    \multicolumn{1}{p{1cm}}{PPL} \\ \hline
+%    \texttt{<code> <code> <code> <code> aload}      & 219 & 206 & 219 & 219 & 193 & 219 & 61.19 \\
+%    \texttt{<code> <code> <code> aload getfield}    & 122 &  93 & 122 & 122 & 108 & 122 & 659.44 \\
+%    \texttt{aload getfield ifnull aload getfield}   & 37  &  22 &  37 &  36 &  37 &  37 & 2478.75 \\
+%    \texttt{istore iload aload arraylength ifcmpge} & 32  &   1 &  32 &  31 &  19 &  32 & 2305.93 \\
+%    \texttt{aload ldc invokespecial gotoInsh aload} & 30  &     &  30 &  30 &  30 &  30 & 7249.22 \\
+%  \end{tabular}
+%  \begin{tabular}{lrrrrrrr}
+%    命令列 &
+%    \multicolumn{1}{p{1cm}}{オリジナル} & 
+%    \multicolumn{1}{p{1cm}}{Allatori} & 
+%    \multicolumn{1}{p{1cm}}{Duplication} & 
+%    \multicolumn{1}{p{1cm}}{Irreducibility} & 
+%    \multicolumn{1}{p{1cm}}{Merge Local Integer} & 
+%    \multicolumn{1}{p{1cm}}{ProGuard} & 
+%    \multicolumn{1}{p{1cm}}{パープレキシティ} \\ \hline
+%    \texttt{dup2X2 lxor lconst1 lneg bipush}   &     &     &     &     & 291 &     & 1.13E+06 \\
+%    \texttt{lload dup2X2 lxor lconst1 lneg}    &     &     &     &     & 291 &     & 536547 \\
+%    \texttt{aload lload bipush lshr l2i}       &     &     &     &     & 253 &     & 5141.94 \\
+%    \texttt{<code> <code> <code> <code> aload} & 219 & 206 & 219 & 219 & 193 & 219 & 61.19 \\
+%    \texttt{bipush lushr land lxor lstore}     &     &     &     &     & 187 &     & 52136.3 \\
+%  \end{tabular}}
+%\end{table*}
 
 
 
-表3を見ると難読化手法の保護前後で違った命令列が数多くみられる。
-また、パープレキシティの値から、珍しい並びであることもわかる。
-図2のグラフを見ると保護後には追加の命令が何回も呼び出されている。
+%表3をみると難読化手法の保護前後で違った命令列が数多くみられる。
+%また、パープレキシティの値から、珍しい並びであることもわかる。
+%図2のグラフをみると保護後には追加の命令が何回も呼び出されている。
 
-\begin{figure}[b]
-  \centering
-  \begin{minipage}[t]{0.49\textwidth}
-  \subfigure[オリジナル]{
-    \includegraphics[clip,width=0.47\textwidth]{1}
-  }
-  \subfigure[Merge Local Integer]{
-    \includegraphics[clip,width=0.47\textwidth]{2}
-  }
-  \end{minipage}
-  \caption{ASM(5gram)頻度のグラフ}\label{fig:graph}
-\end{figure}
+%\begin{figure}[b]
+%  \centering
+%  \begin{minipage}[t]{0.49\textwidth}
+%  \subfigure[オリジナル]{
+%    \includegraphics[clip,width=0.47\textwidth]{1}
+%  }
+%  \subfigure[Merge Local Integer]{
+%    \includegraphics[clip,width=0.47\textwidth]{2}
+%  }
+%  \end{minipage}
+%  \caption{ASM(5gram)頻度のグラフ}\label{fig:graph}
+%\end{figure}
 
-
-これらのデータから難読化手法の特徴を表4に示す。
+ここでは、それぞれの難読化手法を頻度とパープレキシティを参考に$n$-gramの命令列を解析した。
+解析結果は、難読化手法の保護前後で違った命令列がみられた。
+また、追加された命令列はパープレキシティの値が高く、珍しい命令列であることがわかった。
+これらのデータから追加された命令列を難読化手法の特徴とし、その特徴を表\ref{table:caractor}に示す。
 
 \begin{table}[t]
   \centering
@@ -227,15 +216,16 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
 \subsection{既知の難読化手法の特定}
 ここでは、未知のプロダクトをランダムに難読化し、
 どの難読化手法が使われているかを検証する。
-解析した結果を頻度順にソートし、表5に記す。
+解析した結果、オリジナルから追加されている命令を頻度順にソートし、
+表\ref{table:junit}に記す。
 \begin{table}[t]
   \centering
   \footnotesize{
     \caption{junit(5gram)の命令列}\label{table:junit}
   \begin{tabular}{lrr}
     命令列 & 
-    \multicolumn{1}{p{1cm}}{不明な難読化手法} & 
-    \multicolumn{1}{p{1cm}}{パープレキシティ} \\ \hline
+    \multicolumn{1}{p{1cm}}{回数} & 
+    \multicolumn{1}{p{1cm}}{PPL} \\ \hline
 %    \multicolumn{1}{c}{\rotatebox{90}{オリジナル}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{Allatori}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{Duplication}} & 
@@ -251,15 +241,16 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
   \end{tabular}}
 \end{table}
 
-表5を見るとオリジナルから追加されている命令列がある。
-その命令列を特徴とし、5つのツールの特徴と比較する。
-追加命令列には、dup2X2 lxorといったパープレキシティの値が高い命令列がある。
-その特徴と第3.2節で得た表4を比較する。その結果、Merge手法の特徴が当てはまった。
+表\ref{table:junit}をみると、命令列には、
+dup2X2 lxorといったパープレキシティの値が高い命令列を呼び出している。
+その命令列を特徴とし、5つのツールの特徴(表\ref{table:caractor})と比較する。
+その結果、不明な難読化手法の特徴とMerge手法の特徴が当てはまる。
 
 \subsection{未知の難読化手法の特定}
 ここでは、既知のプロダクトを未知の難読化手法で難読化を行い、
 どの難読化手法が使われているかを検証する。
-解析した結果を頻度順にソートし、表6に記す。
+解析した結果、オリジナルから追加されている命令を頻度順にソートし、
+表\ref{table:jhstop}に記す。
 
 \begin{table}[t]
   \centering
@@ -267,8 +258,8 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
     \caption{jhstop(5gram)の命令列}\label{table:jhstop}
   \begin{tabular}{lrr}
     命令列 &
-    \multicolumn{1}{p{1cm}}{未知の難読化手法} & 
-    \multicolumn{1}{p{1cm}}{パープレキシティ} \\ \hline
+    \multicolumn{1}{p{1cm}}{回数} & 
+    \multicolumn{1}{p{1cm}}{PPL} \\ \hline
 %    \multicolumn{1}{c}{\rotatebox{90}{オリジナル}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{Allatori}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{Duplication}} & 
@@ -283,15 +274,14 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
     \texttt{iload dup dup dup imul}                   & 14 & 1.01E+07 \\
     \end{tabular}}
 \end{table}
-
-表6を見ると、dup ,imul命令を複数呼び出している。
-その特徴と第3.2節で得た表4を比較する。
-しかし、難読化手法の特徴と似たものがなかった。
- 次に、未知の難読化手法を別のプロダクトで難読化し、同様に比較を行った。
- その結果、未知の難読化手法の判別が可能となった。
+表\ref{table:jhstop}をみると、パープレキシティの高い命令列であり、dup,imul命令を連続で呼び出している。
+その命令列を特徴とし、5つのツールの特徴(表\ref{table:caractor})と比較する。
+その結果、未知の難読化手法の特徴は解析したどの特徴にも当てはまらなかった。
+次に、異なるプロダクトを未知の難読化手法で難読化し、
+それぞれの特徴を比較する。
+その結果、同様の特徴が検出されたため、未知の難読化手法の判別が可能となった。
  
  \section{まとめ}
-
  本稿では不自然さ評価に着目して、適用された保護手法の特定に取り組んだ。
 実際のプログラムに、5種類の保護手法を適用し、$n$-gramの命令列を頻度順に確認した。
 その結果をもとに不明な難読化の解析を行った。
