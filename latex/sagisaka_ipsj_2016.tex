@@ -43,17 +43,17 @@
 れたプログラムを解析し、難読化手法の特徴を探る。我々は、神崎らの不自然
 さ評価法\cite{kanzaki14ipsj}を利用した測定を行い，Allatoriという難読化
 ツールの特定の可能性を示した\cite{sagisaka15sigss}．本稿では、この研究
-をさらに推し進め、より多くの保護手法の特定を試みる．具体的には、5つの
-難読化手法を適用した9のソフトウェア(jarファイル)の命令を解析し、オペコー
-ドの$n$-gramごとの生成確率を得る。またその結果が、不明な難読化手法が実際
-に特定できるかを確かめる。
+をさらに推し進め、より多くの保護手法の特定を試みる．
+% 具体的には、5つの難読化手法を適用した9のソフトウェア(jarファイル)の
+% 命令を解析し、オペコードの$n$-gramごとの生成確率を得る。またその結果
+% が、不明な難読化手法が実際に特定できるかを確かめる。
 
 \section{提案手法}\label{sect:proposedmethod}
 
 \subsection{キーアイデア}\label{sect:keyidea}
 
 図\ref{fig:overview}に提案手法の模式図を示す。図\ref{fig:overview}のよ
-うにプログラム$p$を何らかの保護手法$f_1$と$f_2$で保護したプログラム
+うにプログラム$p$を何らかの保護手法$f_1$と$f_2$で保護し，
 $p_1=f_1(p)$, $p_2=f_2(p)$を得る。
 %
 そして、特徴抽出関数$C$を用いて$p$, $p_1$, $p_2$から何らかの特徴
@@ -74,7 +74,7 @@ $p_1=f_1(p)$, $p_2=f_2(p)$を得る。
 
 神崎らが提案した不自然さ評価法に着目する\cite{kanzaki14ipsj}。この手法
 は、オペコードの$n$-gramの珍しさを利用するものである。
-
+%
 保護手法に現れる命令列の珍しさが保護手法の特徴であると言えるためである。
 珍しさを算出するために幾つかの手法が提案されている
 \cite{kanzaki14ipsj,gekka14scis}。本稿では，珍しさの算出にパープレキシ
@@ -85,13 +85,34 @@ $p_1=f_1(p)$, $p_2=f_2(p)$を得る。
 一方で、保護手法の中ではコンパイラが出力した本来の命令を重複させる場合
 もある。本来の命令は使用頻度の違いはあるものの、珍しいとは言い難い。そ
 こで、$n$-gramの頻度にも着目する。
-
-以上のように，プログラムから命令の$n$-gramを抽出し，その珍しさ（パープレ
+%
+このように，プログラムから命令の$n$-gramを抽出し，その珍しさ（パープレ
   キシティ）と頻度を保護手法の特徴とする。
 
 \section{評価実験}\label{sect:experiments}
 
 \subsection{概要}
+
+\begin{table}[t]
+  \centering
+  \footnotesize{
+    \caption{利用したJarファイル一覧}\label{table:jars}
+  \begin{tabular}{l|r||l|r||l|r}
+    Product & Version & Product & Version & Products & Version \\ \hline
+    ASM       & 3.3.1 & FakeHack  & 1.0 &JCalendar & 1.3.3   \\
+    Jhstop    & 0.0.1 & Jwhich    & 1.0   & Robocode-setup & 1.6.0.1 
+  \end{tabular}
+  \caption{利用した難読化ツール}\label{table:tools}
+  \begin{tabular}{ll|l}
+      Tools & Abbr. & Overview \\ \hline
+      Allatori Java Obfuscator & ALL & 商用の難読化ツール \\ \hline
+      ProGurad                 & PG & OSSの難読化ツール \\ \hline
+      Sandmark                 & & 研究用の難読化ツール \\
+      \hspace{0.2cm} Duplication registers & DR & 代入を重複させる．\\
+      \hspace{0.2cm} Merge local integers & MLI & 2つのint変数をlongに収める．\\
+      \hspace{0.2cm} Irreducibility       & IRR & 制御フローを複雑にする．\\
+  \end{tabular}}
+\end{table}
 
 本稿では、提案手法により、保護手法ごとの特徴の検出を目的とする。そこで、
 Javaを対象とした難読化ツールを用いて、実際にjarファイルを難読化する。
@@ -105,41 +126,17 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
 初めに、未知のプロダクトをケーススタディで扱った
 5つの難読化ツール（表\ref{table:tools}をランダムに選択し，難読化する。
 そして、どのツールが使われているかを検証する。
-次に、既知のプロダクト（表\ref{table:jars}）を未知の難読化ツールで難読化を行い、
-どのような難読化手法が使われているかを検証する。
-未知のプロダクトとしてjunit 3.7を使用した。
+次に、既知のプロダクト（表\ref{table:jars}）を未知の難読化手法で難読化し、
+どのような手法が使われているかを検証する。
+未知のプロダクトとしてJUnit 3.7を使用した。
 このプロダクトはユニットテストフレムワークである。
-また、未知の難読化手法としてSandmarkのSimple Opaque Predicatesを使用した。
+また、未知の難読化手法としてSandmarkのSimple Opaque Predicates (SOP) を使用した。
 %%%%
 
-\begin{table}[t]
-  \centering
-  \footnotesize{
-    \caption{利用したJarファイル一覧}\label{table:jars}
-  \begin{tabular}{l|r|p{3.5cm}}
-    Product & Version & Overview \\ \hline
-    ASM       & 3.3.1 & \\
-    FakeHack  & 1.0   & \\
-    JCalendar & 1.3.3 & \\
-    Jhstop    & 0.0.1 & \\
-    Jwhich    & 1.0   & \\
-    Robocode-setup & 1.6.0.1 & \\
-  \end{tabular}
-  \caption{利用した難読化ツール}\label{table:tools}
-  \begin{tabular}{l|l}
-      Tools & Overview \\ \hline
-      Allatori Java Obfuscator (ALL) & 商用の難読化ツール \\ \hline
-      ProGurad                 (PG) & OSSの難読化ツール \\ \hline
-      Sandmark                 & 研究用の難読化ツール \\
-      \hspace{0.2cm} Duplication registers (DR) & 代入を重複させる．\\
-      \hspace{0.2cm} Merge local integers (MLI) & 2つのint変数をlongに収める．\\
-      \hspace{0.2cm} Irreducibility       (IRR) & 制御フローを複雑にする．\\
-  \end{tabular}}
-\end{table}
+\subsection{$n$-gramの分析}
 
-\subsection{n-gramの分析}
-ここでは、n-gramの命令列を確認していく。
-オリジナルとMergeの頻度順それぞれでソートしたASMを表3に記す。
+ここでは、$n$-gramの命令列を確認していく。
+オリジナルとMLIの頻度順それぞれでソートしたASMを表3に記す。
 
 \begin{table*}[t]
   \centering
@@ -294,8 +291,9 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
  その結果、未知の難読化手法の判別が可能となった。
  
  \section{まとめ}
-本稿では不自然さ評価に着目して、適用された保護手法の特定に取り組んだ。
-実際のプログラムに、5種類の保護手法を適用し、n-gramの命令列を頻度順に確認した。
+
+ 本稿では不自然さ評価に着目して、適用された保護手法の特定に取り組んだ。
+実際のプログラムに、5種類の保護手法を適用し、$n$-gramの命令列を頻度順に確認した。
 その結果をもとに不明な難読化の解析を行った。
 今回の結果を参考に逆難読化の研究に取り組むことが今後の課題である。
 
