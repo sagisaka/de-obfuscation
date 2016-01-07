@@ -197,35 +197,35 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
 ここでは、それぞれの難読化手法を頻度とパープレキシティを参考に$n$-gramの命令列を解析した。
 解析結果は、難読化手法の保護前後で違った命令列がみられた。
 また、追加された命令列はパープレキシティの値が高く、珍しい命令列であることがわかった。
-これらのデータから追加された命令列を難読化手法の特徴とし、その特徴を表\ref{table:caractor}に示す。
+これらのデータから追加された命令列を難読化手法の特徴とし、その特徴を表\ref{table:features}に示す。
 
 \begin{table}[t]
   \centering
   \footnotesize{
-    \caption{ツールごとの特徴}\label{table:caractor}
+    \caption{ツールごとの特徴}\label{table:features}
   \begin{tabular}{l|l}
     ツール              & 特徴　\\ \hline
-    Allatori            & オリジナルの命令列をSwap命令で入れ替える \\
-    ProGuard            & オリジナルと変化なし \\
-    Duplication         & istore命令を2回続けて呼び出す \\
-    Merge Local Integer & Dup2X2 lxorと連続した命令がある \\
-    Irreducibility      & nop命令がある \\
+    ALL & オリジナルの命令列を\texttt{swap}命令で入れ替える \\
+    PG  & オリジナルと変化なし \\
+    DR  & \texttt{istore}命令を2回続けて実行する \\
+    MLI & \texttt{dup2x2 lxor}を連続して実行する \\
+    IRR & \texttt{nop}命令がある \\
   \end{tabular}}
 \end{table}
 
 \subsection{既知の難読化手法の特定}
-ここでは、未知のプロダクトをランダムに難読化し、
-どの難読化手法が使われているかを検証する。
-解析した結果、オリジナルから追加されている命令を頻度順にソートし、
-表\ref{table:junit}に記す。
+
+ここでは、未知のプロダクトを表\ref{table:tools}のいずれかを用いて難読
+化し、どの難読化手法が使われているかを検証する。難読化適用前の
+$n$-gramに出現していない$n$-gramを調査した。その結果のうち，高頻度の
+$n$-gramを5つ、表\ref{table:junit}に記す。
+
 \begin{table}[t]
   \centering
   \footnotesize{
-    \caption{junit(5gram)の命令列}\label{table:junit}
+    \caption{JUnit (5-gram)の命令列}\label{table:junit}
   \begin{tabular}{l|r|r}
-    命令列 & 
-    回数 & 
-    PPL \\ \hline
+    命令列 & 頻度 & PPL \\ \hline
 %    \multicolumn{1}{c}{\rotatebox{90}{オリジナル}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{Allatori}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{Duplication}} & 
@@ -233,29 +233,35 @@ $n$-gramを基本とし、そのパープレキシティと頻度を用いて比
 %    \multicolumn{1}{c}{\rotatebox{90}{Merge Local Integer}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{ProGuard}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{パープレキシティ}} \\ \hline
-    \texttt{dup2X2 lxor lconst1 lneg bipush}     & 16 & 1.13E+06 \\
-    \texttt{lload dup2X2 lxor lconst1 lneg}      & 16 & 536547 \\
-    \texttt{bipush lushr land lxor lstore}       &  9 & 52136.3 \\
-    \texttt{lconst1 leng bipush lushr land}      &  9 & 96291.9 \\
-    \texttt{lneg bipush lushr land lxor}         &  9 & 136813 \\
+%    \texttt{dup2x2 lxor lconst1 lneg bipush}     & 16 & 1130000 \\
+%    \texttt{lload dup2x2 lxor lconst1 lneg}      & 16 &  536547 \\
+%    \texttt{bipush lushr land lxor lstore}       &  9 &   52136.3 \\
+%    \texttt{lconst1 leng bipush lushr land}      &  9 &   96291.9 \\
+%    \texttt{lneg bipush lushr land lxor}         &  9 &  136813 \\
+    \texttt{dup2x2 lxor lconst\_1 lneg bipush}   & 16 & 11.30E+05 \\
+    \texttt{lload dup2x2 lxor lconst\_1 lneg}    & 16 &  5.37E+05 \\
+    \texttt{bipush lushr land lxor lstore}       &  9 &  0.52E+05 \\
+    \texttt{lconst\_1 leng bipush lushr land}    &  9 &  0.96E+05 \\
+    \texttt{lneg bipush lushr land lxor}         &  9 &  1.37E+05 \\
   \end{tabular}}
 \end{table}
 
-表\ref{table:junit}をみると、命令列には、
-dup2X2 lxorといったパープレキシティの値が高い命令列を呼び出している。
-その命令列を特徴とし、5つのツールの特徴(表\ref{table:caractor})と比較する。
-その結果、不明な難読化手法の特徴とMerge手法の特徴が当てはまる。
+表\ref{table:junit}をみると、命令列には、\texttt{dup2x2 lxor}といった
+パープレキシティの値が高い命令列を呼び出している。その命令列を特徴とし、
+5つのツールの特徴(表\ref{table:features})と比較する。その結果、適用さ
+れている難読化手法の特徴とMLI手法の特徴が当てはまる。
 
 \subsection{未知の難読化手法の特定}
-ここでは、既知のプロダクトを未知の難読化手法で難読化を行い、
-どの難読化手法が使われているかを検証する。
-解析した結果、オリジナルから追加されている命令を頻度順にソートし、
-表\ref{table:jhstop}に記す。
+
+ここでは、既知のプロダクトを未知の難読化手法で難読化を行い、どの難読化
+手法が使われているかを検証する。難読化適用前の$n$-gramに出現していない
+$n$-gramを調査した。その結果のうち，高頻度の$n$-gramを5つ、表
+\ref{table:jhstop}に記す。
 
 \begin{table}[t]
   \centering
   \footnotesize{
-    \caption{jhstop(5gram)の命令列}\label{table:jhstop}
+    \caption{Jhstop (5-gram)の命令列}\label{table:jhstop}
   \begin{tabular}{l|r|r}
     命令列 &
     回数 & 
@@ -267,29 +273,57 @@ dup2X2 lxorといったパープレキシティの値が高い命令列を呼び
 %    \multicolumn{1}{c}{\rotatebox{90}{Merge Local Integer}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{ProGuard}} & 
 %    \multicolumn{1}{c}{\rotatebox{90}{パープレキシティ}} \\ \hline
-    \texttt{irem iconst0 ifIcmpne aload getfield}     & 15 & 15394.6 \\
-    \texttt{dup dup dup imul imul}                    & 14 & 4.24E+06 \\
-    \texttt{dup dup imul imul isub}                   & 14 & 874418 \\
-    \texttt{dup imul imul isub iconst3}               & 14 & 348582 \\
-    \texttt{iload dup dup dup imul}                   & 14 & 1.01E+07 \\
+%     \texttt{irem iconst\_0 if\_icmpne aload getfield} & 15 & 15394.6 \\
+%     \texttt{dup dup dup imul imul}                    & 14 & 4.24E+06 \\
+%     \texttt{dup dup imul imul isub}                   & 14 & 874418 \\
+%     \texttt{dup imul imul isub iconst\_3}             & 14 & 348582 \\
+%     \texttt{iload dup dup dup imul}                   & 14 & 1.01E+07 \\
+    \texttt{irem iconst\_0 if\_icmpne aload getfield} & 15 &   0.15E+05 \\
+    \texttt{dup dup dup imul imul}                    & 14 &  42.40E+05 \\
+    \texttt{dup dup imul imul isub}                   & 14 &   8.74E+05 \\
+    \texttt{dup imul imul isub iconst\_3}             & 14 &   3.49E+05 \\
+    \texttt{iload dup dup dup imul}                   & 14 & 101.00E+05 \\
     \end{tabular}}
 \end{table}
-表\ref{table:jhstop}をみると、パープレキシティの高い命令列であり、dup,imul命令を連続で呼び出している。
-その命令列を特徴とし、5つのツールの特徴(表\ref{table:caractor})と比較する。
-その結果、未知の難読化手法の特徴は解析したどの特徴にも当てはまらなかった。
-次に、異なるプロダクトを未知の難読化手法で難読化し、
-それぞれの特徴を比較する。
-その結果、同様の特徴が検出されたため、未知の難読化手法の判別が可能となった。
- 
- \section{まとめ}
- 本稿では不自然さ評価に着目して、適用された保護手法の特定に取り組んだ。
-実際のプログラムに、5種類の保護手法を適用し、$n$-gramの命令列を頻度順に確認した。
-その結果をもとに不明な難読化の解析を行った。
-今回の結果を参考に逆難読化の研究に取り組むことが今後の課題である。
 
+表\ref{table:jhstop}をみると、パープレキシティの高い命令列であり、
+\texttt{dup}, \texttt{imul}命令を連続で呼び出している。その命令列を特
+徴とし、5つのツールの特徴(表\ref{table:features})と比較する。その結果、
+未知の難読化手法の特徴は、解析したどの特徴にも当てはまらなかった。次に、
+異なるプロダクトを未知の難読化手法で難読化し、それぞれの特徴を比較する。
+その結果、同様の特徴が検出されたため、未知の難読化手法の判別が可能となっ
+た。
+ 
+\section{まとめ}
+
+% 取り組んで，その結果どうだったのかを書いてください．
+
+本稿では不自然さ評価に着目して、適用された保護手法の特定に取り組んだ。
+実際のプログラムに、5種類の保護手法を適用し、$n$-gramの命令列を頻度順
+に確認した。その結果をもとに不明な難読化の解析を行った。今回の結果を参
+考に逆難読化の研究に取り組むことが今後の課題である。
 
 %-------------------------------------------references
-\bibliographystyle{junsrt}
-\bibliography{sagisaka}
+\begin{thebibliography}{1}
+
+\bibitem{kanzaki14ipsj}
+神崎, 尾上, 門田.
+\newblock コードの「不自然さ」に基づくソフトウェア保護機構のステルシネス評価.
+\newblock 情報処理学会論文誌, Vol.~55, No.~2, pp. 1005--1015, 2014.
+
+\bibitem{sagisaka15sigss}
+匂坂, 玉田.
+\newblock 適用保護手法特定の試み －不自然さ評価方法を用いて－.
+\newblock  信学技報, SS2015-21, pp. 63--68, 2015.
+
+\bibitem{gekka14scis}
+大滝, 大堂, 玉田, 神崎, 門田.
+\newblock
+  Javaバイトコード命令のオペコード、オペランドを用いた難読化手法のステルシネス評価.
+\newblock  2014年暗号と情報セキュリティシンポジウム予稿集 (SCIS2014), 
+  2D2--2, 2014.
+
+\end{thebibliography}
+
 
 \end{document}
